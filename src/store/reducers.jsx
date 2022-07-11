@@ -1,4 +1,4 @@
-import { createAction, createReducer } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import {
   addContact,
   filterContacts,
@@ -26,5 +26,6 @@ export const contactReducer = createReducer(initialState, builder => {
       state.items = state.items.filter(
         contact => contact.id !== action.payload
       );
-    });
+    })
+  .addDefaultCase((state, action) => {})
 });

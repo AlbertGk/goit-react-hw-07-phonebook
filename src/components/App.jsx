@@ -15,10 +15,9 @@ import {
 } from '../store/actions';
 
 export const App = () => {
-  // const [contacts, setContacts] = useState([]);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  // const [filter, setFilter] = useState('');
+
   const inputRef = useRef();
   const nameId = useRef(nanoid());
   const numberId = useRef(nanoid());
@@ -33,17 +32,13 @@ export const App = () => {
 
   const setDeletion = payload => dispatch(deleteContact(payload));
 
-   const setContactsFromLs = payload => dispatch(addFromLocalStorage(payload));
-   //const contacts = useSelector(state => state.contacts);
+  const setContactsFromLs = payload => dispatch(addFromLocalStorage(payload));
   
   useEffect(() => {
     const storageArray = loadFromLocalStorage('contacts');
     if (storageArray?.length) {
       setContactsFromLs(storageArray);
-      // console.log(`loadDM: ${contacts}`);
-      // console.log(`lenDM: ${contacts.length}`);
       console.log('storageArray', storageArray);
-      // dispatch(addContact(storageArray));
     }
     inputRef.current.focus();
     // eslint-disable-next-line
@@ -51,28 +46,13 @@ export const App = () => {
 
   useEffect(() => {
     if (name === '') {
-    saveInLocalStorage('contacts', contacts.items);
-    console.log(`saveDU: ${contacts}`);
-    console.log(`lenDU: ${contacts.length}`);
+      saveInLocalStorage('contacts', contacts.items);
+      console.log(`saveDU: ${contacts}`);
+      console.log(`lenDU: ${contacts.length}`);
     }
+    // eslint-disable-next-line
   }, [contacts]);
 
-  // componentDidMount() {
-  //   const storageArray = loadFromLocalStorage('contacts');
-  //   if (storageArray) {
-  //     this.setState({ contacts: storageArray });
-  //     console.log(`load: ${this.state.contacts}`);
-  //     console.log(`len: ${this.state.contacts.length}`);
-  //   }
-  // }
-
-  // componentDidUpdate() {
-  //   if (this.state.name === '') {
-  //     saveInLocalStorage('contacts', this.state.contacts);
-  //     console.log(`save: ${this.state.contacts}`);
-  //     console.log(`len: ${this.state.contacts.length}`);
-  //   }
-  // }
 
   const handleSubmit = ev => {
     ev.preventDefault();
@@ -101,8 +81,6 @@ export const App = () => {
   };
 
   const deletionHandler = id => {
-    //const newContacts = contacts.items.filter(contact => contact.id !== id);
-    //setContacts(newContacts);
     setDeletion(id);
   };
 
