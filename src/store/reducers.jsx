@@ -31,9 +31,9 @@ export const saveContact = createAsyncThunk(postInApi, async contact => {
   return response.data;
 });
 
-export const removeContact = createAsyncThunk(removeFromApi, async contact => {
-  const response = await axios.delete('/contacts', contact);
-  return response.data;
+export const removeContact = createAsyncThunk(removeFromApi, async contactId => {
+  const response = await axios.delete(`/contacts${contactId}`);
+  return response.data.id;
 });
 
 export const contactReducer = createReducer(initialState, builder => {
@@ -54,9 +54,16 @@ export const contactReducer = createReducer(initialState, builder => {
     //   state.items = [...state.items, ...action.payload];
     // })
 
-     .addCase(saveContact.fulfilled, (state, action) => {
-        state.items = [...state.items, action.payload];
-      })
+    .addCase(saveContact.fulfilled, (state, action) => {
+      state.items = [...state.items, action.payload];
+    })
+    
+    .addCase(removeContact, (state, action) => {
+      state.items = state.items.filter(
+        contact => contact.id !== action.payload
+      )
+    })
+       
 
     .addCase(filterContacts, (state, action) => {
       state.filter = action.payload;

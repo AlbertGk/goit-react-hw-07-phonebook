@@ -14,6 +14,7 @@ import {
   addFromLocalStorage,
   getFromApi,
   postInApi,
+  removeFromApi,
 } from '../store/actions';
 
 import { fetchContacts } from '../store/reducers';
@@ -41,9 +42,8 @@ export const App = () => {
   const getContactsFromApi = payload => dispatch(fetchContacts());
 
   const saveContactInApi = payload => dispatch(postInApi(payload));
-  // const resp = fetchContacts();
-  // console.log(resp);
-  
+  const removeContactFromApi = payload => dispatch(removeFromApi(payload));
+
   useEffect(() => {
     // const storageArray = loadFromLocalStorage('contacts');
     // if (storageArray?.length) {
@@ -94,6 +94,7 @@ export const App = () => {
 
   const deletionHandler = id => {
     setDeletion(id);
+    removeContactFromApi(id);
   };
 
   return (
