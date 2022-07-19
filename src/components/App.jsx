@@ -13,6 +13,7 @@ import {
   deleteContact,
   addFromLocalStorage,
   getFromApi,
+  postInApi,
 } from '../store/actions';
 
 import { fetchContacts } from '../store/reducers';
@@ -37,10 +38,11 @@ export const App = () => {
   const setDeletion = payload => dispatch(deleteContact(payload));
 
   // const setContactsFromLs = payload => dispatch(addFromLocalStorage(payload));
-  const getContactsFromApi = payload => dispatch(getFromApi(payload));
+  const getContactsFromApi = payload => dispatch(fetchContacts());
 
-  const resp = fetchContacts();
-  console.log(resp);
+  const saveContactInApi = payload => dispatch(postInApi(payload));
+  // const resp = fetchContacts();
+  // console.log(resp);
   
   useEffect(() => {
     // const storageArray = loadFromLocalStorage('contacts');
@@ -48,7 +50,7 @@ export const App = () => {
     //   setContactsFromLs(storageArray);
     //   console.log('storageArray', storageArray);
     // }
-    // getContactsFromApi(resp);
+    getContactsFromApi();
     inputRef.current.focus();
     // eslint-disable-next-line
   }, []);
@@ -59,7 +61,7 @@ export const App = () => {
     //   console.log(`saveDU: ${contacts}`);
     //   console.log(`lenDU: ${contacts.length}`);
     // }
-    // eslint-disable-next-line
+    // eslint-disable-next-line 
   }, [contacts]);
 
 
@@ -71,6 +73,7 @@ export const App = () => {
       const newList = { id: nanoid(), name: name, number: number };
       console.log('new List', newList);
       setContacts(newList);
+      saveContactInApi(newList);
 
       setName('');
       setNumber('');

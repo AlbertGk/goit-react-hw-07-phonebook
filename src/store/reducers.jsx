@@ -5,6 +5,8 @@ import {
   deleteContact,
   // addFromLocalStorage,
   getFromApi,
+  postInApi,
+  removeFromApi,
 } from '../store/actions';
 
 import axios from 'axios';
@@ -16,19 +18,23 @@ const initialState = {
   status: 'idle',
 };
 
-axios.defaults.baseURL = 'https://62cc50dba080052930a97fa6.mockapi.io';
+axios.defaults.baseURL =
+  'https://62cc50dba080052930a97fa6.mockapi.io/contacts/';
 
 export const fetchContacts = createAsyncThunk(getFromApi, async () => {
   const response = await axios.get('/contacts');
-  return response.contacts;
+  return response.data;
 });
 
-// export const saveNewTodo = createAsyncThunk('todos/saveNewTodo', async text => {
-//   const initialTodo = { text };
-//   const response = await axios.post('/fakeApi/todos', { todo: initialTodo });
-//   return response.todo;
-// });
+export const saveContact = createAsyncThunk(postInApi, async contact => {
+  const response = await axios.post('/contacts', contact);
+  return response.data;
+});
 
+export const removeContact = createAsyncThunk(removeFromApi, async contact => {
+  const response = await axios.delete('/contacts', contact);
+  return response.data;
+});
 
 export const contactReducer = createReducer(initialState, builder => {
   builder
@@ -40,13 +46,18 @@ export const contactReducer = createReducer(initialState, builder => {
       state.status = 'loading';
     })
     .addCase(fetchContacts.fulfilled, (state, action) => {
-      state.items = [...state.items, action.payload];
+      state.items = [...action.payload];
       state.status = 'idle';
     })
 
     // .addCase(addFromLocalStorage, (state, action) => {
     //   state.items = [...state.items, ...action.payload];
     // })
+
+     .addCase(saveContact.fulfilled, (state, action) => {
+        state.items = [...state.items, action.payload];
+      })
+
     .addCase(filterContacts, (state, action) => {
       state.filter = action.payload;
     })
