@@ -5,6 +5,7 @@ import './index.css';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { contactReducer } from './store/reducers';
+import thunkMiddleware from 'redux-thunk';
 
 const store = configureStore({
   reducer: {
