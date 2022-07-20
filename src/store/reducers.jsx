@@ -3,13 +3,12 @@ import {
   addContact,
   filterContacts,
   deleteContact,
-  // addFromLocalStorage,
   getFromApi,
   postInApi,
   removeFromApi,
 } from '../store/actions';
 
-import axios from 'axios';
+import {mockApiInstance} from '../api/client'
 
 
 const initialState = {
@@ -18,22 +17,20 @@ const initialState = {
   status: 'idle',
 };
 
-axios.defaults.baseURL =
-  'https://62cc50dba080052930a97fa6.mockapi.io/contacts/';
 
 export const fetchContacts = createAsyncThunk(getFromApi, async () => {
-  const response = await axios.get('contacts');
+  const response = await mockApiInstance.get('contacts');
   return response.data;
 });
 
 export const saveContact = createAsyncThunk(postInApi, async contact => {
-  const response = await axios.post('contacts', contact);
+  const response = await mockApiInstance.post('contacts', contact);
   return response.data;
 });
 
 export const removeContact = createAsyncThunk(removeFromApi, async contactId => {
-  const response = await axios.delete(`contacts/${contactId}`);
-  return response.data.id;
+  const response = await mockApiInstance.delete(`contacts/${contactId}`);
+  return response.data;
 });
 
 export const contactReducer = createReducer(initialState, builder => {
@@ -42,6 +39,7 @@ export const contactReducer = createReducer(initialState, builder => {
       state.items = [...state.items, action.payload];
     })
 
+    //GET
     .addCase(fetchContacts.pending, (state, action) => {
       state.status = 'loading';
     })
@@ -50,22 +48,25 @@ export const contactReducer = createReducer(initialState, builder => {
       state.status = 'idle';
     })
 
-    // .addCase(addFromLocalStorage, (state, action) => {
-    //   state.items = [...state.items, ...action.payload];
-    // })
-
-    .addCase(saveContact.fulfilled, (state, action) => {
-      state.items = [...state.items, action.payload];
+    //POST
+    .addCase(saveContact.pending, (state, action) => {
+      state.status = 'loading';
     })
-    
-    .addCase(removeContact, (state, action) => {
+    .addCase(saveContact.fulfilled, (state, action) => {
+      state.items = [...state.items, ...action.payload];
+      state.status = 'idle';
+    })
+
+    //DELETE
+    .addCase(removeContact.pending, (state, action) => {
+      state.status = 'loading';
+    })
+    .addCase(removeContact.fulfilled, (state, action) => {
       state.items = state.items.filter(
         contact => contact.id !== action.payload
       );
-      state.status = 'loading';
-      console.log(`action pl ${action.payload}`);
+      state.status = 'idle';
     })
-       
 
     .addCase(filterContacts, (state, action) => {
       state.filter = action.payload;
