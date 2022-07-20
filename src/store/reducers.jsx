@@ -32,7 +32,7 @@ export const saveContact = createAsyncThunk(postInApi, async contact => {
 });
 
 export const removeContact = createAsyncThunk(removeFromApi, async contactId => {
-  const response = await axios.delete(`/contacts${contactId}`);
+  const response = await axios.delete(`/contacts/${contactId}`);
   return response.data.id;
 });
 
