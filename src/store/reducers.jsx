@@ -22,17 +22,17 @@ axios.defaults.baseURL =
   'https://62cc50dba080052930a97fa6.mockapi.io/contacts/';
 
 export const fetchContacts = createAsyncThunk(getFromApi, async () => {
-  const response = await axios.get('/contacts');
+  const response = await axios.get('contacts');
   return response.data;
 });
 
 export const saveContact = createAsyncThunk(postInApi, async contact => {
-  const response = await axios.post('/contacts', contact);
+  const response = await axios.post('contacts', contact);
   return response.data;
 });
 
 export const removeContact = createAsyncThunk(removeFromApi, async contactId => {
-  const response = await axios.delete(`/contacts/${contactId}`);
+  const response = await axios.delete(`contacts/${contactId}`);
   return response.data.id;
 });
 
@@ -61,7 +61,9 @@ export const contactReducer = createReducer(initialState, builder => {
     .addCase(removeContact, (state, action) => {
       state.items = state.items.filter(
         contact => contact.id !== action.payload
-      )
+      );
+      state.status = 'loading';
+      console.log(`action pl ${action.payload}`);
     })
        
 

@@ -17,7 +17,7 @@ import {
   removeFromApi,
 } from '../store/actions';
 
-import { fetchContacts } from '../store/reducers';
+import { fetchContacts, removeContact, saveContact } from '../store/reducers';
 
 
 export const App = () => {
@@ -41,8 +41,8 @@ export const App = () => {
   // const setContactsFromLs = payload => dispatch(addFromLocalStorage(payload));
   const getContactsFromApi = payload => dispatch(fetchContacts());
 
-  const saveContactInApi = payload => dispatch(postInApi(payload));
-  const removeContactFromApi = payload => dispatch(removeFromApi(payload));
+  const saveContactInApi = payload => dispatch(saveContact());
+  const removeContactFromApi = payload => dispatch(removeContact());
 
   useEffect(() => {
     // const storageArray = loadFromLocalStorage('contacts');
